@@ -7,13 +7,20 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "audit:ads": "tsx scripts/run-ads-audit.ts"
+    "audit:ads": "tsx scripts/run-ads-audit.ts",
+    "db:migrate": "psql $DATABASE_URL -f scripts/migrate.sql",
+    "db:seed": "npx tsx scripts/seed.ts",
+    "test:auth-boundary": "npx tsx scripts/test-auth-boundary.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.77",
     "@ai-sdk/google": "^3.0.73",
     "@anthropic-ai/sdk": "^0.96.0",
+    "@aws-sdk/client-s3": "^3.1046.0",
+    "@aws-sdk/s3-request-presigner": "^3.1046.0",
     "@base-ui/react": "^1.4.1",
+    "@clerk/nextjs": "^7.3.3",
+    "@neondatabase/serverless": "^1.1.0",
     "ai": "^6.0.182",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
