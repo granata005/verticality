@@ -1,0 +1,1949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SEO Audit — domain</title>
+  <style>
+:root {
+  --brand:   #1e3a5f;
+  --accent:  #c9a227;
+  --good:    #2d6a4f;
+  --warn:    #d4740e;
+  --danger:  #c53030;
+  --bg:      #faf9f7;
+  --border:  #d6d3cc;
+  --text:    #1a1a2e;
+  --muted:   #6b7280;
+  font-size: 11pt;
+}
+
+@page {
+  size: A4;
+  margin: 20mm 22mm;
+  @top-center  { content: "SEO Audit Report — Verticality"; font-size: 9pt; color: var(--muted); }
+  @bottom-right { content: "Page " counter(page) " of " counter(pages); font-size: 9pt; color: var(--muted); }
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: var(--text);
+  background: #fff;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Cover page */
+.cover {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 0;
+  border-bottom: 3px solid var(--brand);
+  margin-bottom: 60px;
+  page-break-after: always;
+}
+.cover-badge {
+  background: var(--brand);
+  color: #fff;
+  font-size: 9pt;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 2px;
+  margin-bottom: 24px;
+  display: inline-block;
+}
+.cover h1 {
+  font-size: 32pt;
+  color: var(--brand);
+  margin: 0 0 8px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+.cover .domain {
+  font-size: 15pt;
+  color: var(--muted);
+  margin-bottom: 32px;
+}
+.cover .meta {
+  font-size: 10pt;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  width: 100%;
+}
+.cover .meta span { margin-right: 20px; }
+
+/* Headings */
+h1, h2, h3, h4 { color: var(--brand); font-weight: 600; margin-top: 1.8em; }
+h1 { font-size: 20pt; border-bottom: 2px solid var(--brand); padding-bottom: 6px; }
+h2 { font-size: 15pt; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+h3 { font-size: 12pt; }
+h4 { font-size: 11pt; color: var(--muted); }
+
+/* Body text */
+p { margin: .6em 0; }
+a { color: var(--brand); }
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.2em 0;
+  font-size: 10pt;
+  page-break-inside: avoid;
+}
+thead { background: var(--brand); color: #fff; }
+thead th { padding: 7px 10px; text-align: left; font-weight: 600; }
+tbody tr:nth-child(even) { background: #f4f3f1; }
+td { padding: 6px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+
+/* Code */
+code {
+  background: #f0ede8;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 9.5pt;
+  padding: 1px 5px;
+}
+pre code {
+  display: block;
+  padding: 12px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+/* Lists */
+ul, ol { padding-left: 1.4em; margin: .5em 0; }
+li { margin: .25em 0; }
+
+/* Priority badges */
+.badge {
+  display: inline-block;
+  font-size: 8.5pt;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.badge-critical { background: #fee2e2; color: var(--danger); border: 1px solid var(--danger); }
+.badge-high     { background: #fff3cd; color: var(--warn);   border: 1px solid var(--warn); }
+.badge-medium   { background: #e0f2fe; color: #0369a1;       border: 1px solid #0369a1; }
+.badge-low      { background: #f0fdf4; color: var(--good);   border: 1px solid var(--good); }
+
+/* Score box */
+.score-box {
+  display: inline-block;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 56px;
+  font-size: 18pt;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 8px 8px 0;
+  vertical-align: middle;
+}
+.score-good    { background: var(--good); }
+.score-average { background: var(--warn); }
+.score-poor    { background: var(--danger); }
+
+/* Blockquotes (used for callouts) */
+blockquote {
+  border-left: 4px solid var(--accent);
+  background: #fffbf0;
+  padding: 10px 16px;
+  margin: 1em 0;
+  font-style: normal;
+}
+
+/* Page break helpers */
+.page-break { page-break-after: always; }
+h2 { page-break-before: auto; }
+
+/* Footer watermark */
+.watermark {
+  margin-top: 40px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  font-size: 9pt;
+  color: var(--muted);
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+  <div class="cover">
+    <div class="cover-badge">SEO Audit Report</div>
+    <h1>domain</h1>
+    <div class="domain">domain</div>
+    <div class="meta">
+      <span>Prepared by Verticality</span>
+      <span>May 14, 2026</span>
+    </div>
+  </div>
+
+  <h1 id="seo-audit-report-nesthubai">SEO Audit Report — nesthub.ai</h1>
+<p><strong>Prepared by:</strong> Verticality | <strong>Date:</strong> 2026-05-14 | <strong>Confidential</strong></p>
+<hr />
+<h2 id="executive-summary">Executive Summary</h2>
+<h3 id="seo-health-score-24-100">SEO Health Score: 24 / 100</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Raw Score</th>
+<th>Weight</th>
+<th>Weighted Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Technical SEO (incl. Sitemap)</td>
+<td>29 / 100</td>
+<td>22%</td>
+<td>6.38</td>
+</tr>
+<tr>
+<td>Content Quality</td>
+<td>31 / 100</td>
+<td>23%</td>
+<td>7.13</td>
+</tr>
+<tr>
+<td>On-Page SEO</td>
+<td>20 / 100</td>
+<td>20%</td>
+<td>4.00</td>
+</tr>
+<tr>
+<td>Schema &amp; Structured Data</td>
+<td>2 / 100</td>
+<td>10%</td>
+<td>0.20</td>
+</tr>
+<tr>
+<td>Performance (Core Web Vitals)</td>
+<td>28 / 100</td>
+<td>10%</td>
+<td>2.80</td>
+</tr>
+<tr>
+<td>AI Search Readiness (GEO)</td>
+<td>19 / 100</td>
+<td>10%</td>
+<td>1.90</td>
+</tr>
+<tr>
+<td>Images</td>
+<td>30 / 100</td>
+<td>5%</td>
+<td>1.50</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td></td>
+<td><strong>100%</strong></td>
+<td><strong>23.91 → 24 / 100</strong></td>
+</tr>
+</tbody>
+</table>
+<p>NestHub.ai scored 24 out of 100, placing it in the critical risk tier. This score is not a reflection of the product's quality — it is a direct result of a site that is technically functional but has never been configured for search engine visibility. Every major SEO discipline has a blocking or near-blocking deficiency, and the issues compound each other: even if content were improved today, zero of it would rank because the site is actively hidden from all search engines via a sitewide noindex directive.</p>
+<p>The single most important finding from this audit is that every page on nesthub.ai contains <code>&lt;meta name='robots' content='noindex, nofollow' /&gt;</code>. This is a WordPress "Discourage search engines" setting that was almost certainly left on from the development/staging phase and never removed for production launch. It costs five minutes to fix, yet its removal is a prerequisite for every other recommendation in this report to have any effect whatsoever. No page on this site has ever appeared — or will ever appear — in Google, Bing, or any other search engine until this is addressed.</p>
+<p>The remaining score reflects genuine structural gaps: a hero image weighing 1.27 MB (59% of total page weight) driving a 14.4-second mobile LCP, complete absence of any structured data, no meta descriptions or Open Graph tags on any page, a title tag that misdescribes the product as a "Website Management Platform" instead of a real estate platform, and zero published content to establish topical authority. On the AI search side, a namespace collision with Google's Nest Hub hardware product, no LinkedIn company page, no llms.txt, and no blog posts mean the site has no pathway to AI Overview citations. The good news: the infrastructure (WordPress on WP Engine behind Cloudflare) is solid, and the top critical fixes are mostly configuration and quick-implementation tasks — not rewrites.</p>
+<hr />
+<h3 id="business-type-detected">Business Type Detected</h3>
+<p><strong>B2B SaaS — Real Estate Transaction Management Platform.</strong> NestHub.ai is an early-stage software platform targeting two audiences: licensed Realtors (agents) who need a centralized dashboard to manage buyer pipelines, track disclosures, coordinate offers, and communicate with clients; and home buyers who need a single place to track saved properties, review disclosure documents, and monitor offer deadlines. The product is currently in waitlist/early-access phase, available in the Bay Area, California with stated plans to expand to Southern California and additional markets. The site is built on WordPress with the Elementor page builder, hosted on WP Engine, and served through Cloudflare CDN.</p>
+<hr />
+<h3 id="top-5-critical-issues-fix-immediately">Top 5 Critical Issues (Fix Immediately)</h3>
+<ol>
+<li>
+<p><strong>Sitewide <code>noindex, nofollow</code> meta tag</strong> — Every page on nesthub.ai is actively blocked from Google and all other search engines. The site has zero organic search presence. Fix: WordPress Admin &gt; Settings &gt; Reading &gt; uncheck "Discourage search engines." Effort: 5 minutes. This single change is a prerequisite for every other recommendation in this report.</p>
+</li>
+<li>
+<p><strong>No functional XML sitemap</strong> — <code>/sitemap.xml</code> 301-redirects to <code>/wp-sitemap.xml</code>, which returns a 404. No sitemap exists at any tested path. Googlebot cannot systematically discover the site's URLs. Fix: Re-enable WordPress Core sitemap or install Yoast SEO / Rank Math. Effort: 30 minutes.</p>
+</li>
+<li>
+<p><strong>Hero image is 1.27 MB uncompressed JPEG — mobile LCP is 14.4 seconds</strong> — The hero background image (<code>/wp-content/uploads/2025/06/1225.jpg</code>) is 1,300.9 KB and accounts for 59% of total page weight. It is also a CSS background-image, meaning the browser cannot preload it. Lighthouse measures LCP at 14.4 seconds on mobile (threshold: 2.5 seconds). Fix: Convert to WebP at quality 80, target under 100 KB, change to an <code>&lt;img&gt;</code> element with <code>fetchpriority="high"</code>. Estimated LCP improvement: 6–10 seconds. Effort: 2 hours.</p>
+</li>
+<li>
+<p><strong>Incorrect title tag — product is described as "Website Management Platform"</strong> — The homepage title reads "NestHub – Advanced Website Management Platform." NestHub is a real estate transaction management platform, not a website management platform. This misdescribes the product category, misaligns with every real estate keyword, and will confuse Google's entity understanding of the site. Fix: Change the WordPress site title field. Effort: 5 minutes.</p>
+</li>
+<li>
+<p><strong>No structured data of any kind</strong> — Zero JSON-LD, Microdata, or RDFa was found on any page. The site has no Organization, SoftwareApplication, WebSite, or any other schema type. Rich results are entirely out of reach, Google cannot establish an entity for NestHub in its Knowledge Graph, and AI Overview eligibility is zero. Fix: Install Yoast SEO or Rank Math and implement Organization, WebSite, and SoftwareApplication schema. Effort: 2–4 hours.</p>
+</li>
+</ol>
+<hr />
+<h3 id="top-5-quick-wins-2-hours-each">Top 5 Quick Wins (&lt; 2 hours each)</h3>
+<ol>
+<li>
+<p><strong>Remove <code>noindex</code> directive</strong> — 5-minute checkbox in WordPress Settings &gt; Reading. Immediately makes the entire site visible to search engines. Zero development effort required.</p>
+</li>
+<li>
+<p><strong>Fix the title tag</strong> — Change "Advanced Website Management Platform" to "Real Estate Management Platform for Realtors and Buyers" in WordPress Settings &gt; General (or via the SEO plugin). 5 minutes of effort with direct impact on keyword alignment and CTR.</p>
+</li>
+<li>
+<p><strong>Add meta descriptions to all pages</strong> — No <code>&lt;meta name="description"&gt;</code> exists on any page. Writing and implementing 140–160 character descriptions for Homepage, About Us, Join Waitlist, Terms of Use, and Terms &amp; Conditions takes under 1 hour. Prevents Google from auto-generating off-brand snippets.</p>
+</li>
+<li>
+<p><strong>Remove IE8 polyfills (<code>html5shiv.min.js</code> and <code>respond.min.js</code>)</strong> — These scripts serve no purpose in 2026 (they were designed for Internet Explorer 8). They load synchronously in <code>&lt;head&gt;</code> and contribute to the 2,550 ms render-blocking delay. Dequeuing them is a WordPress functions.php change that takes under 15 minutes with a measurable FCP improvement.</p>
+</li>
+<li>
+<p><strong>Create <code>/llms.txt</code></strong> — A two-hour task that immediately provides context to ChatGPT, Perplexity, Claude, and every other AI crawler about what NestHub.ai is, what it does, and who it serves. Currently the site is invisible to AI search; this file is the fastest single action to change that.</p>
+</li>
+</ol>
+<hr />
+<h2 id="1-technical-seo">1. Technical SEO</h2>
+<p><strong>Section Score: 29 / 100</strong></p>
+<p><strong>Audit Date:</strong> 2026-05-14 | <strong>CMS:</strong> WordPress (WP Engine / Cloudflare) | <strong>Page Builder:</strong> Elementor 4.0.8</p>
+<h3 id="score-breakdown">Score Breakdown</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Score</th>
+<th>Weight</th>
+<th>Weighted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Crawlability</td>
+<td>30/100</td>
+<td>15%</td>
+<td>4.5</td>
+</tr>
+<tr>
+<td>Indexability</td>
+<td>0/100</td>
+<td>20%</td>
+<td>0.0</td>
+</tr>
+<tr>
+<td>Security (HTTPS + Headers)</td>
+<td>50/100</td>
+<td>15%</td>
+<td>7.5</td>
+</tr>
+<tr>
+<td>URL Structure &amp; Redirects</td>
+<td>60/100</td>
+<td>10%</td>
+<td>6.0</td>
+</tr>
+<tr>
+<td>Mobile-Friendliness</td>
+<td>70/100</td>
+<td>10%</td>
+<td>7.0</td>
+</tr>
+<tr>
+<td>Core Web Vitals Signals</td>
+<td>35/100</td>
+<td>15%</td>
+<td>5.25</td>
+</tr>
+<tr>
+<td>Structured Data</td>
+<td>0/100</td>
+<td>5%</td>
+<td>0.0</td>
+</tr>
+<tr>
+<td>JavaScript Rendering</td>
+<td>55/100</td>
+<td>5%</td>
+<td>2.75</td>
+</tr>
+<tr>
+<td>IndexNow Protocol</td>
+<td>0/100</td>
+<td>5%</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+<p>The score is critically depressed by a sitewide noindex directive that prevents any page from appearing in search results.</p>
+<hr />
+<h3 id="critical-issues">CRITICAL Issues</h3>
+<h4 id="c-1-sitewide-noindex-nofollow-meta-tag">C-1: Sitewide <code>noindex, nofollow</code> Meta Tag</h4>
+<p>Every page on www.nesthub.ai emits the following meta tag in <code>&lt;head&gt;</code>:</p>
+<pre><code class="language-html">&lt;meta name='robots' content='noindex, nofollow' /&gt;
+</code></pre>
+<p>This is the single most damaging SEO issue on the site. No content can rank. No links pass authority. This is typically set in WordPress under Settings &gt; Reading ("Discourage search engines from indexing this site") and is left on after development.</p>
+<p><strong>Fix:</strong> WordPress Admin &gt; Settings &gt; Reading &gt; uncheck "Discourage search engines from indexing this site." Verify the tag is gone from page source. Submit sitemap via Google Search Console. <strong>Effort: 5 minutes.</strong></p>
+<h4 id="c-2-no-functional-xml-sitemap">C-2: No Functional XML Sitemap</h4>
+<ul>
+<li><code>/sitemap.xml</code> 301-redirects to <code>/wp-sitemap.xml</code></li>
+<li><code>/wp-sitemap.xml</code> returns <strong>404 Not Found</strong></li>
+<li>No sitemap index or sub-sitemaps exist at any tested path</li>
+<li><code>robots.txt</code> contains no <code>Sitemap:</code> directive</li>
+</ul>
+<p><strong>Fix:</strong> Enable WordPress Core sitemap (Settings &gt; Reading, confirm XML Sitemaps is enabled) or install Yoast SEO / Rank Math. Add <code>Sitemap: https://www.nesthub.ai/sitemap.xml</code> to <code>robots.txt</code>. Submit to Google Search Console and Bing Webmaster Tools. <strong>Effort: 30 minutes.</strong></p>
+<h4 id="c-3-wordpress-user-enumeration-via-rest-api">C-3: WordPress User Enumeration via REST API</h4>
+<p>The endpoint <code>/wp-json/wp/v2/users</code> is publicly accessible and returns the names, IDs, and slugs of all registered users:<br />
+- ID 1: nesthub1<br />
+- ID 2: adnan (Adnan Tahir)<br />
+- ID 4: asif (Asif)<br />
+- ID 5: j (J Hassan)</p>
+<p>These usernames can be used in brute-force attacks against <code>/wp-login.php</code>. <code>xmlrpc.php</code> is referenced in the page <code>&lt;head&gt;</code> (the file itself returns 403, but the REST API users endpoint is fully open).</p>
+<p><strong>Fix:</strong> Add a filter in <code>functions.php</code> to remove the <code>/wp/v2/users</code> REST endpoint, or use Wordfence / WP Cerber to block unauthenticated user enumeration. <strong>Effort: 30 minutes.</strong></p>
+<hr />
+<h3 id="high-issues">HIGH Issues</h3>
+<h4 id="h-1-no-open-graph-or-twitter-card-meta-tags">H-1: No Open Graph or Twitter Card Meta Tags</h4>
+<p>When URLs are shared on LinkedIn, Facebook, X (Twitter), Slack, or iMessage, no preview image, title, or description is shown. The page source contains <code>&lt;meta name="og:url" content="..."&gt;</code> but uses <code>name=</code> instead of <code>property=</code>, making it invalid and ignored by all OG parsers.</p>
+<p><strong>Fix:</strong> Add a complete OG block via Yoast SEO or Rank Math: <code>og:title</code>, <code>og:description</code>, <code>og:image</code>, <code>og:url</code>, <code>og:type</code>, plus Twitter Card tags. <strong>Effort: 1 hour.</strong></p>
+<h4 id="h-2-missing-meta-description">H-2: Missing Meta Description</h4>
+<p>The <code>&lt;meta name="description"&gt;</code> tag is entirely absent from the homepage and all audited pages. Google will auto-generate a description, often truncated or off-brand.</p>
+<p><strong>Fix:</strong> Add a compelling, keyword-rich meta description (140–160 characters) to the homepage and all key landing pages. <strong>Effort: 15 minutes.</strong></p>
+<h4 id="h-3-36-css-files-8-duplicate-font-awesome-loads">H-3: 36 CSS Files / 8 Duplicate Font Awesome Loads</h4>
+<p>36 CSS stylesheet <code>&lt;link&gt;</code> tags are render-blocking. Eight separate Font Awesome files load simultaneously across versions 4.7 and 5.15.3 (minified and non-minified variants):<br />
+- <code>all.min.css</code> (v4.0.8), <code>v4-shims.min.css</code> (v4.0.8)<br />
+- <code>font-awesome.min.css</code> (v4.7.0) — legacy duplicate<br />
+- <code>brands.css</code>, <code>fontawesome.css</code>, <code>solid.css</code> (v5.15.3) — full non-minified<br />
+- <code>fontawesome.min.css</code>, <code>solid.min.css</code> (v5.15.3) — minified duplicates</p>
+<p><strong>Fix:</strong> Enable Elementor's "Improved CSS Loading" mode. Remove legacy Font Awesome 4.7.0 entry. Use WP Rocket or Autoptimize to concatenate CSS. <strong>Effort: 2–4 hours.</strong></p>
+<h4 id="h-4-5-render-blocking-scripts-in-head-without-asyncdefer">H-4: 5 Render-Blocking Scripts in <code>&lt;head&gt;</code> Without async/defer</h4>
+<p>jQuery, jQuery Migrate, Font Awesome JS shim, html5shiv, and respond.js load synchronously in <code>&lt;head&gt;</code>. jQuery alone is ~87 KB. <code>html5shiv.min.js</code> and <code>respond.min.js</code> are IE8 polyfills with zero benefit in 2026.</p>
+<p><strong>Fix:</strong> Remove <code>html5shiv.min.js</code> and <code>respond.min.js</code> immediately. Defer remaining scripts using WP Rocket or LiteSpeed Cache. <strong>Effort: 1–2 hours.</strong></p>
+<h4 id="h-5-no-structured-data-schema-markup">H-5: No Structured Data / Schema Markup</h4>
+<p>Zero structured data detected on the homepage. The site misses eligibility for Organization, SoftwareApplication, WebSite, FAQPage, and BreadcrumbList rich results. Rich results can increase SERP CTR by 20–30%.</p>
+<p><strong>Fix:</strong> Implement at minimum Organization (with logo, contacts, social profiles), WebSite (with SearchAction), SoftwareApplication, and Service schema. Use Rank Math or Yoast SEO Premium. <strong>Effort: 2–4 hours.</strong></p>
+<h4 id="h-6-broken-sitemap-redirect-chain">H-6: Broken Sitemap Redirect Chain</h4>
+<p><code>/sitemap.xml</code> 301-redirects to <code>/wp-sitemap.xml</code>, which returns 404. Crawlers waste crawl budget. Google Search Console will report the sitemap as unavailable.</p>
+<p><strong>Fix:</strong> Re-enable WordPress Core sitemap (auto-generates <code>/wp-sitemap.xml</code>) or install an SEO plugin that registers its own sitemap at <code>/sitemap.xml</code> directly, then ensure no conflicting 301 exists. <strong>Effort: 30 minutes.</strong></p>
+<hr />
+<h3 id="medium-issues">MEDIUM Issues</h3>
+<h4 id="m-1-robotstxt-missing-sitemap-directive-and-has-aggressive-crawl-delay">M-1: <code>robots.txt</code> Missing Sitemap Directive and Has Aggressive Crawl-Delay</h4>
+<p>Current <code>robots.txt</code> contains <code>Crawl-delay: 10</code> (10 seconds) which slows Bing, Yandex, and AI crawlers significantly. No <code>Sitemap:</code> directive is present.</p>
+<p><strong>Recommended fix:</strong></p>
+<pre><code>User-agent: *
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
+Sitemap: https://www.nesthub.ai/sitemap.xml
+</code></pre>
+<p>Remove the <code>Crawl-delay</code> line entirely. <strong>Effort: 10 minutes.</strong></p>
+<h4 id="m-2-missing-http-security-headers">M-2: Missing HTTP Security Headers</h4>
+<p>The standard 200 response is missing <code>Strict-Transport-Security</code>, <code>X-Frame-Options</code>, <code>X-Content-Type-Options</code>, <code>Content-Security-Policy</code>, and <code>Referrer-Policy</code>. These are present on Cloudflare's challenge pages but not on actual WordPress responses.</p>
+<p><strong>Fix:</strong> Configure security headers via Cloudflare Transform Rules (free tier supports this) or WP Engine dashboard. <strong>Effort: 1–2 hours.</strong></p>
+<h4 id="m-3-video-element-missing-widthheight-attributes-cls-risk">M-3: Video Element Missing Width/Height Attributes (CLS Risk)</h4>
+<p>The homepage <code>&lt;video&gt;</code> element for the intro video has no explicit <code>width</code> and <code>height</code> attributes, causing layout shift (CLS) as the browser cannot reserve space before the video loads.</p>
+<p><strong>Fix:</strong> Add <code>width="1280" height="720"</code> to the video element, or add <code>video { aspect-ratio: 16/9; width: 100%; }</code> in CSS. <strong>Effort: 15 minutes.</strong></p>
+<h4 id="m-4-no-resource-hints-preconnect-preload">M-4: No Resource Hints (preconnect / preload)</h4>
+<p>Zero <code>&lt;link rel="preload"&gt;</code> or <code>&lt;link rel="preconnect"&gt;</code> tags exist. The LCP element and critical fonts are discovered and fetched late in the waterfall.</p>
+<p><strong>Fix:</strong> Add preload for the LCP hero image and body fonts; add preconnect for <code>fonts.gstatic.com</code>. <strong>Effort: 30 minutes.</strong></p>
+<h4 id="m-5-no-indexnow-protocol-implementation">M-5: No IndexNow Protocol Implementation</h4>
+<p>No IndexNow key file found at any standard path. No Bing or Yandex site verification present. IndexNow reduces indexing latency on Bing from days to hours.</p>
+<p><strong>Fix:</strong> Use Rank Math's built-in IndexNow support, or generate a key at bing.com/indexnow and place the key file at <code>https://www.nesthub.ai/{key}.txt</code>. <strong>Effort: 30 minutes.</strong></p>
+<h4 id="m-6-x-powered-by-header-exposes-technology-stack">M-6: <code>X-Powered-By</code> Header Exposes Technology Stack</h4>
+<p><code>x-powered-by: WP Engine</code> header is present on all responses, confirming the hosting provider to potential attackers.</p>
+<p><strong>Fix:</strong> Suppress via WP Engine portal or <code>header_remove('X-Powered-By')</code> in <code>wp-config.php</code>. <strong>Effort: 15 minutes.</strong></p>
+<hr />
+<h3 id="low-issues">LOW Issues</h3>
+<table>
+<thead>
+<tr>
+<th>Issue</th>
+<th>Effort</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>og:url</code> uses <code>name=</code> instead of <code>property=</code> attribute</td>
+<td>5 min</td>
+</tr>
+<tr>
+<td>Two duplicate RSS feed <code>&lt;link&gt;</code> tags in <code>&lt;head&gt;</code></td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>WordPress REST API discovery links exposed in HTTP response headers</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>SSL certificate expires 2026-07-28 (Let's Encrypt, auto-renew should be active — monitor only)</td>
+<td>Monitor</td>
+</tr>
+<tr>
+<td><code>Vary: Accept-Encoding</code> header quadruplicated</td>
+<td>30 min</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-content-quality">2. Content Quality</h2>
+<p><strong>Section Score: 31 / 100</strong></p>
+<p><strong>Audit Date:</strong> 2026-05-14 | <strong>Pages Audited:</strong> Homepage, About Us, Terms of Use, Terms &amp; Conditions | <strong>Framework:</strong> Google Quality Rater Guidelines (September 2025), E-E-A-T weighted scoring</p>
+<h3 id="score-breakdown_1">Score Breakdown</h3>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Score</th>
+<th>Weight</th>
+<th>Weighted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E-E-A-T (combined)</td>
+<td>28/100</td>
+<td>35%</td>
+<td>9.8</td>
+</tr>
+<tr>
+<td>Content Depth &amp; Topical Authority</td>
+<td>25/100</td>
+<td>25%</td>
+<td>6.3</td>
+</tr>
+<tr>
+<td>Heading Structure &amp; Keyword Usage</td>
+<td>45/100</td>
+<td>15%</td>
+<td>6.8</td>
+</tr>
+<tr>
+<td>Readability</td>
+<td>52/100</td>
+<td>10%</td>
+<td>5.2</td>
+</tr>
+<tr>
+<td>AI Citation Readiness</td>
+<td>20/100</td>
+<td>10%</td>
+<td>2.0</td>
+</tr>
+<tr>
+<td>Content Freshness</td>
+<td>10/100</td>
+<td>5%</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td></td>
+<td></td>
+<td><strong>30.6 → 31</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="e-e-a-t-assessment-28-100">E-E-A-T Assessment: 28 / 100</h3>
+<p><strong>Experience (12 / 20):</strong> The About Us page contains a first-person founder narrative describing over a decade of hands-on Realtor work. This is a genuine experience signal. However, the founder is never named — an anonymous first-person story provides weak E-E-A-T because the claim cannot be verified. No LinkedIn profile, professional bio, or author page is linked anywhere.</p>
+<p><strong>Expertise (14 / 25):</strong> The homepage and About page demonstrate real domain fluency — concepts like disclosure management, offer deadlines, comparables, and the Realtor-buyer relationship are used correctly and with appropriate specificity. Gaps: no named author or credentials, no DRE license number, no methodology content, and the "2M Active Listings" claim on the About page has no source, date, or methodology.</p>
+<p><strong>Authoritativeness (8 / 25):</strong> This is the site's weakest E-E-A-T dimension. Zero external backlinks or press coverage are referenced on-site. No industry certifications, NAR membership signals, or MLS data affiliation are mentioned. No blog, resource section, or published content. No customer reviews or third-party platform ratings. Only one social profile listed (Instagram — <code>https://www.instagram.com/nesthub.ai/</code>): no LinkedIn, no Twitter/X, no YouTube.</p>
+<p><strong>Trustworthiness (22 / 30):</strong> This is the strongest relative E-E-A-T dimension. Positive signals: contact email <code>support@nesthub.ai</code>, phone <code>(925) 237-1463</code>, payment methods disclosed (PayPal, Visa, Mastercard), HTTPS enforced, Terms of Use and Terms &amp; Conditions pages exist, geographic scope stated ("Currently available in the Bay Area, California"). Gaps: no physical address, no privacy policy page found in navigation, no security badges or data handling disclosures.</p>
+<hr />
+<h3 id="content-depth-and-topical-authority-25-100">Content Depth and Topical Authority: 25 / 100</h3>
+<p><strong>Word Counts vs. Minimums:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Page</th>
+<th>Type</th>
+<th>Minimum</th>
+<th>Actual Body Words</th>
+<th>Gap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Homepage</td>
+<td>Homepage</td>
+<td>500</td>
+<td>~339</td>
+<td>-161 words (32% below floor)</td>
+</tr>
+<tr>
+<td>About Us</td>
+<td>About/Brand</td>
+<td>500</td>
+<td>~422</td>
+<td>-78 words (16% below floor)</td>
+</tr>
+</tbody>
+</table>
+<p>Word count is not a direct ranking factor, but topical coverage is. Both pages fall below the minimum threshold for their page types, reflecting thin coverage rather than just brevity.</p>
+<p><strong>Homepage — THIN:</strong> Features are covered at a surface level — each feature receives one sentence. Missing: no explanation of how NestHub differs from existing tools (Dotloop, Skyslope, CRMs), no use case scenarios, no pricing, no FAQ section, no testimonials or social proof, no competitor differentiation.</p>
+<p><strong>About Us Page — THIN:</strong> The founder narrative is authentic but ends abruptly. The stats block (2M Active Listings, 100% Backed by Real Agents, 0 Offer Deadlines Missed, 10+ Markets Targeted) has no sourcing or explanation. The values section lists six values with generic one-paragraph descriptions that provide no substantive E-E-A-T value and read as placeholder or AI-assisted content.</p>
+<p><strong>Topical Authority — Absent:</strong> No blog, resource center, guides, or glossary exists. Competitors (Dotloop, SkySlope, Homebot) publish extensive content covering disclosure law, offer strategy, buyer education, and agent productivity. NestHub has zero published content that would signal subject-matter authority to Google.</p>
+<hr />
+<h3 id="heading-structure-and-keyword-usage-45-100">Heading Structure and Keyword Usage: 45 / 100</h3>
+<p><strong>Homepage heading hierarchy:</strong></p>
+<pre><code>H1: &quot;Finally - a smarter way to manage the homes your clients actually care about.&quot;
+H1: &quot;Let's Build Something Amazing Together!&quot; ← SECOND H1 (incorrect)
+H2: &quot;A Platform Built for Realtor Success&quot;
+H2: &quot;A Platform Designed for Smart Homebuyers&quot;
+H2: &quot;From first showing to final signature—NestHub keeps everything in one place.&quot;
+H3: &quot;About Us&quot; / &quot;Payments Accepted&quot; / &quot;Contact Info&quot; / &quot;Socialize&quot; (footer only — no body H3s)
+</code></pre>
+<p>Issues: Two H1 tags on the homepage (the second in the CTA section). None of the H2s contain target keywords — they are marketing slogans. Zero H3 content subheadings in the main body.</p>
+<p><strong>About Us heading hierarchy:</strong></p>
+<pre><code>H1: &quot;About NestHub&quot; (contains hidden zero-width space character U+200B after &quot;NestHub&quot;)
+H2: &quot;2M&quot; / &quot;100%&quot; / &quot;0&quot; / &quot;10+&quot; ← stat counters incorrectly marked as H2 headings
+H2: &quot;Our values&quot;
+H2: &quot;Ready to work more efficiently with your clients?&quot;
+</code></pre>
+<p>Stat counter numbers marked as H2 headings provide no semantic content signal to crawlers.</p>
+<p><strong>Title Tag Error — Critical:</strong><br />
+- <strong>Current:</strong> <code>NestHub – Advanced Website Management Platform</code><br />
+- <strong>Should be:</strong> <code>NestHub – Real Estate Management Platform for Realtors and Buyers</code></p>
+<p>The word "Website" misdescribes the product category and misaligns with every relevant real estate keyword.</p>
+<p><strong>Keyword frequency — Homepage:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Keyword</th>
+<th>Occurrences</th>
+<th>Assessment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>home/homes</td>
+<td>14</td>
+<td>Appropriate</td>
+</tr>
+<tr>
+<td>buyer/buyers</td>
+<td>13</td>
+<td>Appropriate</td>
+</tr>
+<tr>
+<td>offer/offers</td>
+<td>7</td>
+<td>Good</td>
+</tr>
+<tr>
+<td>disclosure/disclosures</td>
+<td>6</td>
+<td>Good</td>
+</tr>
+<tr>
+<td>real estate</td>
+<td>1</td>
+<td>Critically low for category keyword</td>
+</tr>
+<tr>
+<td>realtor</td>
+<td>2</td>
+<td>Low for primary audience label</td>
+</tr>
+<tr>
+<td>dashboard</td>
+<td>2</td>
+<td>Low for a platform product</td>
+</tr>
+<tr>
+<td>platform</td>
+<td>2</td>
+<td>Low</td>
+</tr>
+</tbody>
+</table>
+<p>The primary category keyword "real estate management software" or "real estate management platform" does not appear in any form on the homepage.</p>
+<hr />
+<h3 id="readability-52-100">Readability: 52 / 100</h3>
+<p>Approximate Flesch Reading Ease score for homepage body copy: <strong>46.3</strong> (college-level; recommended: 60–70 for web content). Average sentence length: ~15.6 words per sentence.</p>
+<p>Positive signals: active voice, parallel structure in feature descriptions, natural first-person voice on About page, industry terms used appropriately for the target Realtor audience.</p>
+<p>Readability gaps: long text blocks on About page with no subheadings; values section uses a formulaic pattern common in AI-generated brand content; no numbered lists, comparison tables, or structured formats that aid comprehension and AI extraction.</p>
+<hr />
+<h3 id="content-freshness-10-100">Content Freshness: 10 / 100</h3>
+<p>No publication dates, update dates, or changelog entries appear on any page. The "Coming soon" note for the mobile-ready feature on the homepage actively signals an unfinished product to both users and crawlers. No blog, news, or resource section exists — the domain has zero time-stamped content signals.</p>
+<hr />
+<h3 id="critical-content-issues-register">Critical Content Issues Register</h3>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Issue</th>
+<th>Page(s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Critical</td>
+<td>Site-wide <code>noindex, nofollow</code> — entire site excluded from Google</td>
+<td>All pages</td>
+</tr>
+<tr>
+<td>Critical</td>
+<td>Title tag reads "Website Management Platform" — incorrect product category</td>
+<td>Homepage</td>
+</tr>
+<tr>
+<td>Critical</td>
+<td>No <code>&lt;meta name="description"&gt;</code> on any page</td>
+<td>All pages</td>
+</tr>
+<tr>
+<td>High</td>
+<td>Duplicate H1 tag on homepage</td>
+<td>Homepage</td>
+</tr>
+<tr>
+<td>High</td>
+<td>Stat counters (2M, 100%, 0, 10+) incorrectly marked up as H2 heading tags</td>
+<td>About Us</td>
+</tr>
+<tr>
+<td>High</td>
+<td>Zero-width space character (U+200B) in About page H1</td>
+<td>About Us</td>
+</tr>
+<tr>
+<td>High</td>
+<td>No Open Graph tags on any page</td>
+<td>All pages</td>
+</tr>
+<tr>
+<td>High</td>
+<td>Homepage body word count 339 — 32% below 500-word minimum</td>
+<td>Homepage</td>
+</tr>
+<tr>
+<td>High</td>
+<td>About page body word count 422 — 16% below 500-word floor</td>
+<td>About Us</td>
+</tr>
+<tr>
+<td>High</td>
+<td>"real estate management" keyword appears once combined across both main pages</td>
+<td>Homepage, About</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>Founder never named — anonymous authorship undermines E-E-A-T</td>
+<td>About Us</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>H2 headings are slogans, not keyword-informed section labels</td>
+<td>Homepage</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>"2M Active Listings" and "0 Offer Deadlines Missed" stats have no source</td>
+<td>About Us</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>No FAQ, glossary, or Q&amp;A content</td>
+<td>Site-wide</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>"Coming soon" copy for mobile feature — unfinished product signal</td>
+<td>Homepage</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>No LinkedIn, Twitter/X, or YouTube linked — single Instagram only</td>
+<td>Site-wide</td>
+</tr>
+<tr>
+<td>Medium</td>
+<td>No privacy policy page found in site navigation</td>
+<td>Site-wide</td>
+</tr>
+<tr>
+<td>Low</td>
+<td>No blog, resource center, or published content</td>
+<td>Site-wide</td>
+</tr>
+<tr>
+<td>Low</td>
+<td>No customer testimonials, case studies, or reviews</td>
+<td>Site-wide</td>
+</tr>
+<tr>
+<td>Low</td>
+<td>No pricing or plan information anywhere on the public site</td>
+<td>Site-wide</td>
+</tr>
+<tr>
+<td>Low</td>
+<td>Only 5 total internal links across homepage, no contextual cross-linking</td>
+<td>Site-wide</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-on-page-seo">3. On-Page SEO</h2>
+<p><strong>Section Score: 20 / 100</strong> <em>(Derived from Technical + Content findings)</em></p>
+<p>On-Page SEO covers the elements that directly influence how search engines read, understand, and rank individual pages: title tags, meta descriptions, heading structure, internal linking, and social metadata. Every one of these elements has a significant deficiency on nesthub.ai.</p>
+<hr />
+<h3 id="title-tags">Title Tags</h3>
+<p><strong>Homepage:</strong> <code>NestHub – Advanced Website Management Platform</code></p>
+<p>This title contains an error that misdescribes the product. "Website Management Platform" describes tools like Webflow or Elementor Cloud — not a real estate transaction management application. The consequence is that Google will associate NestHub.ai with the wrong product category. The corrected title should be approximately: <code>NestHub – Real Estate Management Platform for Realtors and Homebuyers</code>.</p>
+<p>No title tags were evaluable on interior pages during the audit (pages are currently noindex'd and Cloudflare-challenged for automated access), but since no SEO plugin is installed, interior pages are likely pulling from WordPress's default post/page title field with no optimization.</p>
+<p><strong>Best practice requirements not met:</strong><br />
+- Primary keyword in title: No ("real estate" does not appear)<br />
+- Title accurately describes the page: No ("Website" vs "Real Estate")<br />
+- Title length appropriate (50–60 characters): Partially (current is 49 characters, corrected version will need trimming)<br />
+- Brand name present: Yes</p>
+<hr />
+<h3 id="meta-descriptions">Meta Descriptions</h3>
+<p><strong>Status: Missing on all audited pages.</strong> No <code>&lt;meta name="description"&gt;</code> tag was found on the homepage, About Us, or any other audited page.</p>
+<p>Without a meta description:<br />
+- Google generates its own snippet from page body text, typically pulling from whatever paragraph is closest to the query match — often producing incomplete, off-brand results<br />
+- Click-through rate from SERPs is reduced vs. a well-crafted, keyword-rich description<br />
+- Bing Copilot and Perplexity use meta descriptions as site summaries; without one, AI-generated summaries will be equally unreliable</p>
+<p>All pages require unique meta descriptions of 140–160 characters.</p>
+<hr />
+<h3 id="heading-structure">Heading Structure</h3>
+<p>The heading structure across both main pages has multiple structural errors that reduce crawler comprehension and remove keyword placement opportunities:</p>
+<ul>
+<li><strong>Two H1 tags on the homepage</strong> — The primary H1 is the hero tagline; a second H1 appears in the CTA section ("Let's Build Something Amazing Together!"). Pages should contain exactly one H1.</li>
+<li><strong>Stat counters marked as H2 headings on About Us</strong> — "2M", "100%", "0", and "10+" are rendered as H2 elements via Elementor's counter widget. These provide no semantic keyword signal and confuse the document outline.</li>
+<li><strong>No keyword-informed H2s on the homepage</strong> — All H2 tags are marketing phrases, not keyword-targeted section labels. Opportunity: "Real Estate Offer Management Tools for Realtors," "Home Search Dashboard for Buyers," etc.</li>
+<li><strong>Zero H3 content subheadings in body content</strong> — All H3 tags are in the footer (navigation labels). No body sections use H3 subheadings.</li>
+<li><strong>Hidden zero-width space character (U+200B)</strong> in the H1 of the About page (<code>"About NestHub​"</code>) which may cause inconsistent rendering or parsing in certain contexts.</li>
+</ul>
+<hr />
+<h3 id="internal-linking">Internal Linking</h3>
+<p>Only 5 internal links are present across the entire homepage. There is no contextual cross-linking between content sections or pages. From an SEO standpoint:</p>
+<ul>
+<li>No PageRank flows from the homepage to interior pages beyond direct navigation links</li>
+<li>Google cannot establish a clear topical relationship between pages based on anchor text</li>
+<li>The About Us page has no links to product features; the homepage has no links to the About Us page within body content</li>
+<li>No blog exists, so no editorial link opportunities are currently possible</li>
+</ul>
+<p>As the site expands, a deliberate internal linking strategy — connecting feature pages, the blog, and landing pages with descriptive anchor text — will be essential for distributing crawl equity and reinforcing topical authority.</p>
+<hr />
+<h3 id="social-metadata-open-graph-twitter-cards">Social Metadata (Open Graph / Twitter Cards)</h3>
+<p><strong>Status: Missing on all pages (one malformed tag present).</strong> The only social meta tag present is <code>&lt;meta name="og:url" content="https://www.nesthub.ai/"&gt;</code>, which uses the incorrect attribute (<code>name=</code> instead of <code>property=</code>) and is ignored by all Open Graph parsers. <code>og:title</code>, <code>og:description</code>, <code>og:image</code>, and <code>og:type</code> are entirely absent. No Twitter Card tags exist.</p>
+<p>When any nesthub.ai URL is shared on LinkedIn, Slack, iMessage, Facebook, or Twitter/X, the preview renders as a blank link with no image, title, or description. This is a direct, measurable conversion-rate impact on any social sharing campaign.</p>
+<p><strong>Minimum required implementation:</strong></p>
+<pre><code class="language-html">&lt;meta property=&quot;og:title&quot; content=&quot;NestHub – Real Estate Management Platform for Realtors and Buyers&quot; /&gt;
+&lt;meta property=&quot;og:description&quot; content=&quot;[page-specific description]&quot; /&gt;
+&lt;meta property=&quot;og:image&quot; content=&quot;https://www.nesthub.ai/[og-image.jpg]&quot; /&gt;
+&lt;meta property=&quot;og:url&quot; content=&quot;https://www.nesthub.ai/&quot; /&gt;
+&lt;meta property=&quot;og:type&quot; content=&quot;website&quot; /&gt;
+&lt;meta name=&quot;twitter:card&quot; content=&quot;summary_large_image&quot; /&gt;
+&lt;meta name=&quot;twitter:title&quot; content=&quot;NestHub – Real Estate Management Platform&quot; /&gt;
+&lt;meta name=&quot;twitter:image&quot; content=&quot;https://www.nesthub.ai/[twitter-image.jpg]&quot; /&gt;
+</code></pre>
+<p>An SEO plugin (Yoast SEO or Rank Math) automates all of the above across all pages.</p>
+<hr />
+<h3 id="canonical-tags">Canonical Tags</h3>
+<p>The homepage has a correctly self-referencing canonical tag. Interior pages (<code>/about-us/</code>, <code>/join-waitlist/</code>, <code>/terms-of-use/</code>) were confirmed to lack canonical declarations during the schema audit, leaving them open to duplicate content interpretation. The non-www to www redirect chain is correct (single 301 hop) and does not create canonical conflicts.</p>
+<hr />
+<h2 id="4-schema-structured-data">4. Schema &amp; Structured Data</h2>
+<p><strong>Section Score: 2 / 100</strong></p>
+<p><strong>Audit Date:</strong> 2026-05-14 | <strong>Pages Crawled:</strong> Homepage, /about-us/, /join-waitlist/, /terms-of-use/ | <strong>SEO Plugin:</strong> None detected</p>
+<hr />
+<h3 id="detected-schema-inventory">Detected Schema Inventory</h3>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Type</th>
+<th>Page</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JSON-LD</td>
+<td>—</td>
+<td>All pages</td>
+<td>Not present</td>
+</tr>
+<tr>
+<td>Microdata</td>
+<td>—</td>
+<td>All pages</td>
+<td>Not present</td>
+</tr>
+<tr>
+<td>RDFa</td>
+<td>—</td>
+<td>All pages</td>
+<td>Not present</td>
+</tr>
+</tbody>
+</table>
+<p><strong>No structured data detected on any page.</strong></p>
+<p>The 2/100 score reflects only a single malformed <code>og:url</code> tag using the incorrect <code>name=</code> attribute. There is no valid structured data of any kind.</p>
+<hr />
+<h3 id="critical-issues_1">Critical Issues</h3>
+<p><strong>C-1: Sitewide <code>noindex, nofollow</code></strong> — Even correctly implemented schema will have no SEO impact while this directive is active. Fix this first (see Technical SEO, C-1).</p>
+<p><strong>C-2: Zero structured data on any page</strong> — For a B2B SaaS platform targeting real estate professionals, this represents a complete absence of signals that help Google understand the business entity, the software product, and the service offered.</p>
+<hr />
+<h3 id="high-issues_1">High Issues</h3>
+<p><strong>H-1: No SEO plugin installed</strong> — No Yoast SEO, RankMath, or AIOSEO output is present. This is the root cause of most on-page and schema deficiencies. Installing Rank Math (free) addresses: Organization schema sitewide, meta descriptions on all pages, Open Graph tags, canonical tags on all interior pages, and IndexNow protocol. <strong>Fix: Install Rank Math or Yoast SEO. Effort: 30 minutes.</strong></p>
+<p><strong>H-2: Open Graph meta tags are malformed and incomplete</strong> — The only OG tag present is <code>&lt;meta name="og:url" ...&gt;</code> using the wrong attribute (<code>name=</code> instead of <code>property=</code>). <code>og:title</code>, <code>og:description</code>, <code>og:image</code>, and <code>og:type</code> are entirely absent. <strong>Fix: Add complete OG block via SEO plugin using <code>property=</code> attribute.</strong></p>
+<p><strong>H-3: No <code>meta name="description"</code> on any page</strong> — See On-Page SEO section.</p>
+<hr />
+<h3 id="medium-issues_1">Medium Issues</h3>
+<p><strong>M-1: No <code>WebSite</code> schema with <code>SearchAction</code></strong> — Not implemented. Quick win once SEO plugin is installed.</p>
+<p><strong>M-2: No <code>SoftwareApplication</code> schema</strong> — NestHub is a software product. Google supports SoftwareApplication rich results including application category, operating system, and aggregate rating.</p>
+<p><strong>M-3: No <code>Organization</code> schema</strong> — The most fundamental schema for any business. Establishes entity identity (name, URL, logo, contact, social profiles) in Google's Knowledge Graph.</p>
+<p><strong>M-4: No canonical tags on sub-pages</strong> — Only the homepage has a canonical. All other pages lack canonical declarations.</p>
+<p><strong>M-5: Double slash in RSS feed alternate link</strong> — <code>https://www.nesthub.ai//feed/</code> contains a double slash. Minor technical defect.</p>
+<hr />
+<h3 id="recommended-json-ld-implementations">Recommended JSON-LD Implementations</h3>
+<p>The following schema blocks should be implemented as a priority, starting with Organization and SoftwareApplication on the homepage:</p>
+<p><strong>Organization (Homepage — global):</strong></p>
+<pre><code class="language-json">{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;Organization&quot;,
+  &quot;name&quot;: &quot;NestHub&quot;,
+  &quot;url&quot;: &quot;https://www.nesthub.ai/&quot;,
+  &quot;logo&quot;: &quot;https://www.nesthub.ai/wp-content/uploads/YOUR-LOGO.png&quot;,
+  &quot;description&quot;: &quot;NestHub is a smart, all-in-one platform that helps Realtors and buyers stay organized, track homes, manage offers, and access key documents—streamlining the journey from first showing to final signature.&quot;,
+  &quot;contactPoint&quot;: {
+    &quot;@type&quot;: &quot;ContactPoint&quot;,
+    &quot;telephone&quot;: &quot;+1-925-237-1463&quot;,
+    &quot;contactType&quot;: &quot;customer support&quot;,
+    &quot;email&quot;: &quot;support@nesthub.ai&quot;
+  },
+  &quot;areaServed&quot;: [{&quot;@type&quot;: &quot;Place&quot;, &quot;name&quot;: &quot;Bay Area, California&quot;}, {&quot;@type&quot;: &quot;Place&quot;, &quot;name&quot;: &quot;Southern California&quot;}],
+  &quot;sameAs&quot;: []
+}
+</code></pre>
+<p><strong>SoftwareApplication (Homepage):</strong></p>
+<pre><code class="language-json">{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;SoftwareApplication&quot;,
+  &quot;name&quot;: &quot;NestHub&quot;,
+  &quot;url&quot;: &quot;https://www.nesthub.ai/&quot;,
+  &quot;applicationCategory&quot;: &quot;BusinessApplication&quot;,
+  &quot;operatingSystem&quot;: &quot;Web, iOS, Android&quot;,
+  &quot;description&quot;: &quot;NestHub is a real estate transaction management platform that helps Realtors manage buyer pipelines, track homes, share disclosures, and coordinate offers from first showing to final signature.&quot;
+}
+</code></pre>
+<p>Additional schema to implement: <code>WebSite</code> with <code>SearchAction</code>, <code>Service</code>, <code>Person</code> (founder on About page), and <code>BreadcrumbList</code> on all interior pages. Full JSON-LD blocks are detailed in the raw schema audit file.</p>
+<hr />
+<h3 id="schema-implementation-priority">Schema Implementation Priority</h3>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Action</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Remove <code>noindex, nofollow</code></td>
+<td>Prerequisite for any schema to have effect</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Install Yoast SEO or Rank Math</td>
+<td>Infrastructure for all other fixes</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Add <code>Organization</code> JSON-LD</td>
+<td>Entity establishment in Knowledge Graph</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Fix Open Graph tags</td>
+<td>Social sharing, link previews</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Add <code>meta name="description"</code></td>
+<td>SERP CTR</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Add <code>SoftwareApplication</code> JSON-LD</td>
+<td>Rich result eligibility</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Add <code>WebSite</code> JSON-LD</td>
+<td>Sitelinks Searchbox eligibility</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Add <code>Service</code> JSON-LD</td>
+<td>Entity context for service offering</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Add <code>BreadcrumbList</code> to interior pages</td>
+<td>Breadcrumb rich results</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Add <code>Person</code> schema on About Us</td>
+<td>Founder entity + E-E-A-T signals</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-performance-core-web-vitals">5. Performance (Core Web Vitals)</h2>
+<p><strong>Section Score: 28 / 100</strong></p>
+<p><strong>Data Source:</strong> Lighthouse CLI 13.3, mobile simulation (4G throttle: 150ms RTT, 1.6 Mbps down, 4x CPU slowdown), 2026-05-14. Note: PageSpeed Insights API quota was exhausted at time of audit — all values are lab measurements and should be validated against CrUX field data once quota resets.</p>
+<hr />
+<h3 id="core-web-vitals-summary">Core Web Vitals Summary</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Lab Value</th>
+<th>Threshold</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LCP (Largest Contentful Paint)</td>
+<td><strong>14.4 s</strong></td>
+<td>≤ 2.5 s</td>
+<td>FAIL</td>
+</tr>
+<tr>
+<td>INP (Interaction to Next Paint)</td>
+<td>TBT proxy: 3,500 ms</td>
+<td>≤ 200 ms</td>
+<td>LIKELY FAIL</td>
+</tr>
+<tr>
+<td>CLS (Cumulative Layout Shift)</td>
+<td>0</td>
+<td>≤ 0.1</td>
+<td>PASS</td>
+</tr>
+<tr>
+<td>FCP (First Contentful Paint)</td>
+<td><strong>4.6 s</strong></td>
+<td>≤ 1.8 s</td>
+<td>FAIL</td>
+</tr>
+<tr>
+<td>TTI (Time to Interactive)</td>
+<td><strong>14.4 s</strong></td>
+<td>≤ 3.8 s</td>
+<td>FAIL</td>
+</tr>
+<tr>
+<td>Speed Index</td>
+<td><strong>7.7 s</strong></td>
+<td>≤ 3.4 s</td>
+<td>FAIL</td>
+</tr>
+<tr>
+<td>TBT (Total Blocking Time)</td>
+<td><strong>3,500 ms</strong></td>
+<td>≤ 200 ms</td>
+<td>FAIL</td>
+</tr>
+<tr>
+<td>TTFB (Server Response Time)</td>
+<td><strong>20 ms</strong></td>
+<td>≤ 200 ms</td>
+<td>PASS</td>
+</tr>
+</tbody>
+</table>
+<p>CLS passes (0) and TTFB is excellent at 20 ms (Cloudflare edge + WP Engine caching). All performance problems are entirely front-end. LCP and TBT/INP are catastrophically bad.</p>
+<hr />
+<h3 id="other-lighthouse-scores">Other Lighthouse Scores</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Performance</td>
+<td>28 / 100</td>
+</tr>
+<tr>
+<td>Accessibility</td>
+<td>89 / 100</td>
+</tr>
+<tr>
+<td>Best Practices</td>
+<td>77 / 100</td>
+</tr>
+<tr>
+<td>SEO</td>
+<td>61 / 100</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="page-weight-breakdown">Page Weight Breakdown</h3>
+<p><strong>Total transfer size: 2,198 KB (2.15 MB)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Resource Type</th>
+<th>Files</th>
+<th>Size</th>
+<th>% of Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Images</td>
+<td>11</td>
+<td>1,554.9 KB</td>
+<td>71%</td>
+</tr>
+<tr>
+<td>Stylesheets</td>
+<td>35</td>
+<td>221.5 KB</td>
+<td>10%</td>
+</tr>
+<tr>
+<td>Fonts</td>
+<td>9</td>
+<td>192.3 KB</td>
+<td>9%</td>
+</tr>
+<tr>
+<td>Scripts</td>
+<td>21</td>
+<td>165.8 KB</td>
+<td>8%</td>
+</tr>
+<tr>
+<td>Media (video)</td>
+<td>3</td>
+<td>43.4 KB</td>
+<td>2%</td>
+</tr>
+<tr>
+<td>Other</td>
+<td>—</td>
+<td>~20 KB</td>
+<td>1%</td>
+</tr>
+</tbody>
+</table>
+<p>The hero image alone (<code>1225.jpg</code> at 1,300.9 KB) represents <strong>59% of total page weight</strong>.</p>
+<hr />
+<h3 id="critical-issues_2">Critical Issues</h3>
+<p><strong>1. Hero Image Is 1.27 MB JPEG as a CSS Background — LCP: 14.4 s</strong><br />
+<code>/wp-content/uploads/2025/06/1225.jpg</code> is 1,300.9 KB on the wire. It is implemented as a CSS <code>background-image</code>, which means the browser cannot discover or preload it via HTML parsing. Lighthouse estimates 887 KB savings from WebP/AVIF conversion. This single issue accounts for the majority of the LCP failure.</p>
+<p><strong>Fix:</strong> Convert to WebP at quality 80, target under 100 KB. Change from CSS <code>background-image</code> to an <code>&lt;img&gt;</code> tag with <code>fetchpriority="high"</code>. Add <code>&lt;link rel="preload" as="image" href="/path/to/hero.webp" fetchpriority="high"&gt;</code> to <code>&lt;head&gt;</code>. Estimated LCP improvement: <strong>6–10 seconds</strong>. <strong>Effort: 2 hours.</strong></p>
+<p><strong>2. 15 Render-Blocking Resources — 2,550 ms Estimated Savings</strong><br />
+15 resources load synchronously in <code>&lt;head&gt;</code>, blocking first paint:</p>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Size</th>
+<th>Delay</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stratusx/assets/css/app.css</code></td>
+<td>47.9 KB</td>
+<td>1,227 ms</td>
+</tr>
+<tr>
+<td><code>ht-mega-for-elementor/htmega-global-style.min.css</code></td>
+<td>52.2 KB</td>
+<td>1,527 ms</td>
+</tr>
+<tr>
+<td><code>font-awesome/css/fontawesome.css</code> (FA 5.15)</td>
+<td>13.3 KB</td>
+<td>627 ms</td>
+</tr>
+<tr>
+<td><code>jquery.min.js</code> (no async/defer)</td>
+<td>31.1 KB</td>
+<td>927 ms</td>
+</tr>
+<tr>
+<td><code>jquery-migrate.min.js</code> (no async/defer)</td>
+<td>5.1 KB</td>
+<td>327 ms</td>
+</tr>
+<tr>
+<td>Plus 6 additional Font Awesome CSS files</td>
+<td>—</td>
+<td>177 ms each</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fix:</strong> Add <code>defer</code> to all non-critical scripts. Inline critical CSS (~5–10 KB) and load full stylesheets asynchronously. Use WP Rocket or Perfmatters on WordPress. <strong>Effort: 3–4 hours.</strong></p>
+<p><strong>3. Cloudflare Bot Management JS — 6,840 ms Scripting Time (80% of TBT)</strong><br />
+The Cloudflare Bot Management script (<code>cdn-cgi/challenge-platform/scripts/jsd/main.js</code>) accounts for 6,840 ms of scripting time — more than 80% of all script evaluation and the primary cause of the 3,500 ms Total Blocking Time / high INP.</p>
+<p><strong>Fix:</strong> Evaluate whether Cloudflare Bot Fight Mode (free tier) is strictly necessary. If Bot Management (paid product) is enabled, confirm the version is current. Consider whether the protection level is appropriate for the current traffic profile. <strong>Effort: 1–2 hours investigation.</strong></p>
+<p><strong>4. Main Thread Blocked for 8.4 Seconds</strong></p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Script Evaluation</td>
+<td>7,197 ms</td>
+</tr>
+<tr>
+<td>Other</td>
+<td>611 ms</td>
+</tr>
+<tr>
+<td>Style &amp; Layout</td>
+<td>328 ms</td>
+</tr>
+<tr>
+<td>Parse HTML &amp; CSS</td>
+<td>108 ms</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fix:</strong> Defer jQuery and all plugin scripts. Remove unused Bootstrap + Popper JS (~18 KB). Dequeue <code>wp-emoji-release.min.js</code> (5.4 KB — universally unnecessary on SaaS product sites).</p>
+<hr />
+<h3 id="high-issues_2">High Issues</h3>
+<p><strong>35 CSS Files — 221.5 KB Total, 61% Unused:</strong></p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Wasted</th>
+<th>% Unused</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>htmega-global-style.min.css</code></td>
+<td>51.9 KB</td>
+<td>100%</td>
+</tr>
+<tr>
+<td><code>stratusx/assets/css/app.css</code></td>
+<td>45.2 KB</td>
+<td>95%</td>
+</tr>
+<tr>
+<td><code>font-awesome/css/fontawesome.css</code></td>
+<td>12.7 KB</td>
+<td>99%</td>
+</tr>
+<tr>
+<td><code>font-awesome/css/all.min.css</code></td>
+<td>12.6 KB</td>
+<td>99%</td>
+</tr>
+<tr>
+<td><code>font-awesome/css/fontawesome.min.css</code></td>
+<td>12.3 KB</td>
+<td>99%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fix:</strong> Consolidate CSS, run PurgeCSS to remove unused rules, disable HT Mega global stylesheet if the plugin is not actively used. Target total CSS under 30 KB.</p>
+<p><strong>Font Awesome Loaded 8 Times — Multiple Versions:</strong> See Technical SEO H-3 for full file list. Additionally, <code>fa-brands-400.woff2</code> (79.9 KB) and <code>fa-regular-400.woff2</code> (13.2 KB) lack <code>font-display: swap</code>, causing 125 ms render block on brand icons.</p>
+<p><strong>No Resource Hints:</strong> Zero <code>preconnect</code>, <code>preload</code>, or <code>dns-prefetch</code> tags. Font files and the LCP image are discovered late. <strong>Fix:</strong> Add preload for LCP image and body fonts (Lato, Varela Round).</p>
+<hr />
+<h3 id="medium-issues_2">Medium Issues</h3>
+<p><strong>Video poster image <code>video.jpg</code> (126.9 KB JPEG)</strong> — Compress to under 20 KB at WebP. Video posters are overlay-covered immediately; high resolution is unnecessary.</p>
+<p><strong><code>Frame-1321317316.png</code> (115.5 KB)</strong> — 78.6 KB wasted per Lighthouse image delivery audit. Convert to WebP.</p>
+<p><strong>Cache on HTML set to 600 seconds (10 minutes)</strong> — Cloudflare <code>CF-Cache-Status: MISS</code> on www at test time — HTML hitting WP Engine origin on many requests. Set long-lived cache headers on versioned static assets.</p>
+<p><strong>Logo served at wrong resolution</strong> — <code>Logo-Design-for-Modern-Real-Estate-Software-1.png</code> displayed at 227×84 CSS pixels but rendered at 151×56. Serve at 2x (454×168) for retina via <code>srcset</code>.</p>
+<hr />
+<h3 id="estimated-impact-of-top-3-fixes">Estimated Impact of Top 3 Fixes</h3>
+<table>
+<thead>
+<tr>
+<th>Fix</th>
+<th>Expected LCP Improvement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hero image → WebP + under 100 KB</td>
+<td>−6 to −8 s LCP</td>
+</tr>
+<tr>
+<td><code>&lt;img fetchpriority="high"&gt;</code> + <code>&lt;link rel="preload"&gt;</code></td>
+<td>−2 to −3 s LCP</td>
+</tr>
+<tr>
+<td>Defer render-blocking scripts + inline critical CSS</td>
+<td>−1 to −2 s FCP/LCP</td>
+</tr>
+</tbody>
+</table>
+<p>Combined, these three changes could bring LCP from 14.4 s to approximately 3–5 s on mobile.</p>
+<hr />
+<h2 id="6-sitemap-crawlability">6. Sitemap &amp; Crawlability</h2>
+<p><strong>Section Score: 4 / 100</strong></p>
+<p><strong>Audit Date:</strong> 2026-05-14 | <strong>Platform:</strong> WordPress on WP Engine | <strong>Total Indexable URLs Found in Sitemap:</strong> 0 | <strong>Total Published Pages:</strong> 5 | <strong>Total Published Posts:</strong> 0</p>
+<hr />
+<h3 id="coverage-summary">Coverage Summary</h3>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/sitemap.xml</code> accessible</td>
+<td>No — 404 after redirect</td>
+</tr>
+<tr>
+<td><code>/wp-sitemap.xml</code> accessible</td>
+<td>No — 404</td>
+</tr>
+<tr>
+<td><code>robots.txt</code> Sitemap directive</td>
+<td>No — missing</td>
+</tr>
+<tr>
+<td>Pages with noindex</td>
+<td>5/5 (100%)</td>
+</tr>
+<tr>
+<td>Total indexable pages</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Sitemap coverage</td>
+<td>0%</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="critical-issues_3">Critical Issues</h3>
+<p><strong>CRITICAL-1: No Sitemap Exists — All Sitemap URLs Return 404</strong></p>
+<table>
+<thead>
+<tr>
+<th>URL Requested</th>
+<th>Redirect Chain</th>
+<th>Final Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>https://nesthub.ai/sitemap.xml</code></td>
+<td>301 → <code>https://www.nesthub.ai/wp-sitemap.xml</code></td>
+<td><strong>404</strong></td>
+</tr>
+<tr>
+<td><code>https://www.nesthub.ai/sitemap.xml</code></td>
+<td>301 → <code>https://www.nesthub.ai/wp-sitemap.xml</code></td>
+<td><strong>404</strong></td>
+</tr>
+<tr>
+<td><code>https://www.nesthub.ai/wp-sitemap.xml</code></td>
+<td>—</td>
+<td><strong>404</strong></td>
+</tr>
+<tr>
+<td><code>https://www.nesthub.ai/sitemap_index.xml</code></td>
+<td>—</td>
+<td><strong>404</strong></td>
+</tr>
+<tr>
+<td><code>https://www.nesthub.ai/page-sitemap.xml</code></td>
+<td>—</td>
+<td><strong>404</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The WordPress built-in sitemap appears explicitly disabled — likely via <code>add_filter('wp_sitemaps_enabled', '__return_false')</code> or a plugin. The redirect from <code>/sitemap.xml</code> → <code>/wp-sitemap.xml</code> is a misconfigured server rewrite.</p>
+<p><strong>CRITICAL-2: Sitewide <code>noindex, nofollow</code> on All Pages</strong> — Even if a sitemap existed, no pages would be indexed. (See Technical SEO, C-1.)</p>
+<hr />
+<h3 id="high-issues_3">High Issues</h3>
+<p><strong>HIGH-1: No Sitemap Directive in <code>robots.txt</code></strong> — Only <code>/wp-admin/</code> restriction present. No <code>Sitemap:</code> line.</p>
+<p><strong>HIGH-2: <code>Crawl-delay: 10</code> in <code>robots.txt</code></strong> — Google ignores this but Bing and AI crawlers respect it. Signals misconfiguration.</p>
+<p><strong>HIGH-3: Broken Redirect Chain on Sitemap Path</strong> — Non-WWW → WWW redirect rewrites <code>/sitemap.xml</code> to <code>/wp-sitemap.xml</code>, creating a permanently broken path.</p>
+<hr />
+<h3 id="medium-issues_3">Medium Issues</h3>
+<p><strong>MEDIUM-1: Only 5 Pages, 0 Posts on Entire Site</strong> — Published pages: Homepage, About, Join Waitlist, Terms of Use, Terms &amp; Conditions. No blog, no feature pages, no pricing, no use-case landing pages.</p>
+<p><strong>MEDIUM-2: No Content Strategy</strong> — Zero blog posts. A SaaS product in real estate technology requires topical content to rank for any organic queries.</p>
+<hr />
+<h3 id="required-actions-priority-order">Required Actions (Priority Order)</h3>
+<ol>
+<li>Remove sitewide noindex — WordPress Admin &gt; Settings &gt; Reading</li>
+<li>Re-enable WordPress sitemap — remove <code>wp_sitemaps_enabled</code> filter</li>
+<li>Fix sitemap redirect rule — <code>/sitemap.xml</code> should point to itself, not <code>/wp-sitemap.xml</code></li>
+<li>Add <code>Sitemap:</code> directive to <code>robots.txt</code> — <code>Sitemap: https://www.nesthub.ai/wp-sitemap.xml</code></li>
+<li>Submit to Google Search Console and Bing Webmaster Tools</li>
+</ol>
+<hr />
+<h2 id="7-ai-search-readiness-geo">7. AI Search Readiness (GEO)</h2>
+<p><strong>Section Score: 19 / 100</strong></p>
+<p><strong>Audit Date:</strong> 2026-05-14 | <strong>Domain:</strong> https://nesthub.ai | <strong>Industry:</strong> Real Estate SaaS (Bay Area, CA)</p>
+<hr />
+<h3 id="score-breakdown_2">Score Breakdown</h3>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Weight</th>
+<th>Raw Score</th>
+<th>Weighted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Citability</td>
+<td>25%</td>
+<td>18 / 100</td>
+<td>4.5</td>
+</tr>
+<tr>
+<td>Structural Readability</td>
+<td>20%</td>
+<td>30 / 100</td>
+<td>6.0</td>
+</tr>
+<tr>
+<td>Multi-Modal Content</td>
+<td>15%</td>
+<td>10 / 100</td>
+<td>1.5</td>
+</tr>
+<tr>
+<td>Authority &amp; Brand Signals</td>
+<td>20%</td>
+<td>8 / 100</td>
+<td>1.6</td>
+</tr>
+<tr>
+<td>Technical Accessibility</td>
+<td>20%</td>
+<td>27 / 100</td>
+<td>5.4</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td>100%</td>
+<td>—</td>
+<td><strong>19 / 100</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="platform-specific-scores">Platform-Specific Scores</h3>
+<table>
+<thead>
+<tr>
+<th>AI Platform</th>
+<th>Score</th>
+<th>Key Barrier</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Google AI Overviews</td>
+<td>12 / 100</td>
+<td>No structured content, no E-E-A-T signals, no FAQ schema</td>
+</tr>
+<tr>
+<td>ChatGPT (Browse / SearchGPT)</td>
+<td>8 / 100</td>
+<td>No content corpus to cite; GPTBot not explicitly named in robots.txt</td>
+</tr>
+<tr>
+<td>Perplexity</td>
+<td>10 / 100</td>
+<td>PerplexityBot not named; no citable passages exist</td>
+</tr>
+<tr>
+<td>Bing Copilot</td>
+<td>14 / 100</td>
+<td>Crawled but no structured content to surface</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="section-1-ai-crawler-access">Section 1: AI Crawler Access</h3>
+<p>The current <code>robots.txt</code> uses a <code>User-agent: *</code> wildcard but specifies no explicit rules for any AI crawler. While no AI crawlers are explicitly blocked, none are explicitly allowed either. The global <code>Crawl-delay: 10</code> applies to all bots and unnecessarily throttles AI indexing.</p>
+<table>
+<thead>
+<tr>
+<th>Crawler</th>
+<th>Owner</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPTBot</td>
+<td>OpenAI (ChatGPT, SearchGPT)</td>
+<td>Not explicitly named — wildcard only</td>
+</tr>
+<tr>
+<td>OAI-SearchBot</td>
+<td>OpenAI (real-time search)</td>
+<td>Not named</td>
+</tr>
+<tr>
+<td>ClaudeBot</td>
+<td>Anthropic</td>
+<td>Not named</td>
+</tr>
+<tr>
+<td>PerplexityBot</td>
+<td>Perplexity AI</td>
+<td>Not named</td>
+</tr>
+<tr>
+<td>CCBot</td>
+<td>Common Crawl</td>
+<td>Not named</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Recommended <code>robots.txt</code>:</strong></p>
+<pre><code>User-agent: GPTBot
+Allow: /
+Crawl-delay: 2
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+Crawl-delay: 2
+
+User-agent: PerplexityBot
+Allow: /
+Crawl-delay: 2
+
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 2
+
+User-agent: bingbot
+Allow: /
+Crawl-delay: 2
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: *
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
+Crawl-delay: 5
+
+Sitemap: https://nesthub.ai/sitemap.xml
+</code></pre>
+<hr />
+<h3 id="section-2-llmstxt-status">Section 2: llms.txt Status</h3>
+<p><strong>Status: ABSENT (404)</strong> — No <code>/llms.txt</code> or <code>/llms-full.txt</code> exists. Without it, AI models must infer context from raw HTML, which for a thin-content site like nesthub.ai yields almost nothing to cite.</p>
+<p><strong>Recommended <code>/llms.txt</code>:</strong></p>
+<pre><code class="language-markdown"># NestHub
+
+&gt; NestHub is a real estate transaction management platform for Bay Area home buyers and realtors. It centralizes property comparables, disclosures, offer tracking, and buyer-agent communication in a single dashboard.
+
+## Core Use Cases
+- [Buyer Dashboard](https://nesthub.ai/#buyers): Track saved homes, disclosures, and offer deadlines
+- [Realtor Tools](https://nesthub.ai/#realtors): Manage multiple buyers, automate updates, streamline offers
+- [About](https://nesthub.ai/about): Company background, founding story, market coverage
+
+## Contact
+- Support: support@nesthub.ai
+- Phone: (925) 237-1463
+- Coverage: Bay Area, California (Southern CA expanding)
+</code></pre>
+<hr />
+<h3 id="section-3-passage-level-citability-18-100">Section 3: Passage-Level Citability (18 / 100)</h3>
+<p>AI citation research identifies 134–167 words as the optimal passage length. NestHub's homepage consists primarily of feature labels (3–8 words each) with no supporting paragraphs. No passage on the site approaches the optimal length.</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Citable?</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What is NestHub?</td>
+<td>No</td>
+<td>Tagline only: "a smarter way to manage the homes your clients actually care about" — too vague</td>
+</tr>
+<tr>
+<td>Realtor features</td>
+<td>No</td>
+<td>H3 labels only (e.g., "Streamlined Offer Management")</td>
+</tr>
+<tr>
+<td>Buyer features</td>
+<td>No</td>
+<td>H3 labels only (e.g., "A Home for Your Home Search")</td>
+</tr>
+<tr>
+<td>About page</td>
+<td>Partially</td>
+<td>Founder story present but qualitative only</td>
+</tr>
+<tr>
+<td>Pricing</td>
+<td>N/A</td>
+<td>Page 404s</td>
+</tr>
+<tr>
+<td>Blog / Articles</td>
+<td>N/A</td>
+<td>No blog exists</td>
+</tr>
+</tbody>
+</table>
+<p>Zero H2/H3 headings are phrased as questions. All headings are declarative marketing phrases. AI models use question-format headings as strong signals for featured snippet and AI Overview inclusion.</p>
+<hr />
+<h3 id="section-4-structural-readability-for-ai-extraction-30-100">Section 4: Structural Readability for AI Extraction (30 / 100)</h3>
+<p><strong>Positive signals:</strong> WordPress-based server-side rendering (HTML accessible without JS execution), H1/H2/H3 hierarchy present, contact information consistent, geographic targeting explicit.</p>
+<p><strong>Deficiencies:</strong> No Schema.org markup of any kind, no Open Graph tags, no meta description, excessive crawl-delay, no internal linking beyond homepage (all other content pages — <code>/pricing</code>, <code>/features</code>, <code>/contact</code>, <code>/blog</code> — return 404).</p>
+<hr />
+<h3 id="section-5-multi-modal-content-10-100">Section 5: Multi-Modal Content (10 / 100)</h3>
+<p>No blog posts, no video content, no infographics, no downloadable guides, no webinars. The <code>platform.nesthub.ai</code> subdomain is a login wall inaccessible to crawlers.</p>
+<p><strong>Critical gap:</strong> YouTube presence is the single strongest predictor of AI citation correlation (~0.737 correlation coefficient in GEO research). NestHub has no YouTube channel or video content. This is the highest-ROI content gap to close for AI citation coverage.</p>
+<hr />
+<h3 id="section-6-authority-brand-signals-8-100">Section 6: Authority &amp; Brand Signals (8 / 100)</h3>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Status</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Wikipedia page</td>
+<td>Does not exist for nesthub.ai — Wikipedia's "NestHub" covers Google's smart display product</td>
+<td>Critical negative</td>
+</tr>
+<tr>
+<td>LinkedIn company page</td>
+<td>404 — no page found at linkedin.com/company/nesthub-ai</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td>Reddit mentions</td>
+<td>Likely zero — early stage</td>
+<td>High</td>
+</tr>
+<tr>
+<td>YouTube channel</td>
+<td>Not found</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Crunchbase listing</td>
+<td>Not found</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Press / news mentions</td>
+<td>None detected</td>
+<td>High</td>
+</tr>
+<tr>
+<td>G2 / Capterra listing</td>
+<td>Not found</td>
+<td>Medium</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Namespace Collision Risk (Critical):</strong> The brand name "NestHub" is already occupied in Wikipedia and public consciousness by Google's Nest Hub smart display product. When any AI model encounters the query "what is NestHub," it defaults to the Google hardware product. This suppresses every AI citation path for nesthub.ai. Mitigation: consistently use "NestHub.ai" (with the .ai suffix) in all content, Schema.org markup, and directory listings.</p>
+<hr />
+<h3 id="competitive-ai-search-landscape">Competitive AI Search Landscape</h3>
+<p>For real estate transaction management queries, AI models currently cite Dotloop, SkySlope, Glide (disclosure management), Fello and Follow Up Boss (agent CRM), and Homeward/Ribbon (buyer enablement). NestHub.ai does not appear in any of these citation clusters. Entry requires: named entity status, published comparison/versus content, and third-party review platform presence.</p>
+<hr />
+<h3 id="geo-critical-issues-summary">GEO Critical Issues Summary</h3>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Finding</th>
+<th>Severity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>llms.txt</td>
+<td>Missing</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td>robots.txt AI crawlers</td>
+<td>Not named, ambiguous</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td>Blog / article content</td>
+<td>Zero posts published</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td>Schema.org markup</td>
+<td>Absent</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td>Namespace collision with Google Nest Hub</td>
+<td>Active confusion risk</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td>LinkedIn company page</td>
+<td>Does not exist</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td>Named authorship</td>
+<td>Missing from all content</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Crunchbase / directory listings</td>
+<td>Not found</td>
+<td>High</td>
+</tr>
+<tr>
+<td>FAQ page</td>
+<td>Does not exist</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Broken internal pages (<code>/pricing</code>, <code>/features</code>, <code>/contact</code>, <code>/blog</code>)</td>
+<td>All return 404</td>
+<td>High</td>
+</tr>
+<tr>
+<td>YouTube presence</td>
+<td>Not found</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Meta description</td>
+<td>Missing on all pages</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Sitemap</td>
+<td>Returns 403/404</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Open Graph tags</td>
+<td>Missing on all pages</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Third-party reviews (G2, Capterra)</td>
+<td>Not found</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Statistics on About page</td>
+<td>Unattributed</td>
+<td>Medium</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-images">8. Images</h2>
+<p><strong>Section Score: 30 / 100</strong> <em>(Derived from Performance + Technical findings)</em></p>
+<p>Image optimization is the single most impactful performance lever available to nesthub.ai. Images account for 71% of total page weight (1,554.9 KB of a 2,198 KB total) and one image alone — the hero background — accounts for 59% of the entire page's transfer size.</p>
+<hr />
+<h3 id="hero-image-lcp-element">Hero Image (LCP Element)</h3>
+<p><strong>File:</strong> <code>/wp-content/uploads/2025/06/1225.jpg</code><br />
+<strong>Format:</strong> JPEG (no WebP or AVIF)<br />
+<strong>Size on wire:</strong> 1,300.9 KB (1.27 MB)<br />
+<strong>Lighthouse estimated savings:</strong> 887 KB by converting to WebP/AVIF at equivalent quality<br />
+<strong>Critical problem:</strong> The image is implemented as a CSS <code>background-image</code>, making it undiscoverable by the browser's preload scanner. It cannot receive <code>fetchpriority="high"</code> or be preloaded via <code>&lt;link rel="preload"&gt;</code>.</p>
+<p><strong>Fix:</strong><br />
+1. Convert to WebP at quality 80 — target under 100 KB<br />
+2. Change from CSS <code>background-image</code> to an <code>&lt;img&gt;</code> element<br />
+3. Add <code>fetchpriority="high"</code> attribute<br />
+4. Add <code>&lt;link rel="preload" as="image" href="/path/to/hero.webp" fetchpriority="high"&gt;</code> to <code>&lt;head&gt;</code><br />
+5. Add responsive <code>srcset</code> with multiple sizes for different viewports</p>
+<p><strong>Expected impact:</strong> 887 KB page weight reduction; 6–10 second LCP improvement on mobile.</p>
+<hr />
+<h3 id="video-poster-image">Video Poster Image</h3>
+<p><strong>File:</strong> <code>video.jpg</code><br />
+<strong>Format:</strong> JPEG<br />
+<strong>Size:</strong> 126.9 KB<br />
+<strong>Problem:</strong> Video poster images are immediately covered by video controls on play; high resolution is unnecessary.</p>
+<p><strong>Fix:</strong> Compress to under 20 KB at WebP. <strong>Estimated savings: ~107 KB.</strong></p>
+<hr />
+<h3 id="feature-ui-screenshot">Feature / UI Screenshot</h3>
+<p><strong>File:</strong> <code>Frame-1321317316.png</code><br />
+<strong>Format:</strong> PNG<br />
+<strong>Size:</strong> 115.5 KB<br />
+<strong>Lighthouse waste:</strong> 78.6 KB</p>
+<p><strong>Fix:</strong> Convert to WebP or AVIF. AVIF typically outperforms WebP for mixed-content PNGs. <strong>Estimated savings: ~78 KB.</strong></p>
+<hr />
+<h3 id="logo-sizing-issue">Logo Sizing Issue</h3>
+<p><strong>File:</strong> <code>Logo-Design-for-Modern-Real-Estate-Software-1.png</code><br />
+<strong>Display size:</strong> 227×84 CSS pixels<br />
+<strong>Actual rendered size detected:</strong> 151×56 pixels (oversized relative to display context)</p>
+<p><strong>Fix:</strong> Serve at 2x (454×168) for retina displays via <code>srcset</code>, no larger. No responsive image pipeline is currently in place.</p>
+<hr />
+<h3 id="alt-text-assessment">Alt Text Assessment</h3>
+<p>A complete alt text audit was not possible for all images due to Cloudflare WAF blocking automated access to some sub-pages. Based on the homepage HTML analysis, images identified as present include the hero, video poster, and feature screenshots. Alt text status for feature images could not be confirmed but should be audited and populated for all images, as:<br />
+- Missing alt text is an accessibility issue (Lighthouse Accessibility score: 89/100 — some deductions present)<br />
+- Descriptive alt text contributes to keyword relevance signals<br />
+- AI search systems use alt text alongside surrounding content for image understanding</p>
+<p><strong>Fix:</strong> Audit all images across the site. Add descriptive, keyword-relevant alt text to every non-decorative image. Decorative images should use <code>alt=""</code>.</p>
+<hr />
+<h3 id="image-optimization-checklist">Image Optimization Checklist</h3>
+<table>
+<thead>
+<tr>
+<th>Image</th>
+<th>Format</th>
+<th>Current Size</th>
+<th>Target Size</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1225.jpg</code> (hero LCP)</td>
+<td>JPEG</td>
+<td>1,300.9 KB</td>
+<td>&lt; 100 KB</td>
+<td>Convert to WebP, change to <code>&lt;img&gt;</code></td>
+</tr>
+<tr>
+<td><code>video.jpg</code> (poster)</td>
+<td>JPEG</td>
+<td>126.9 KB</td>
+<td>&lt; 20 KB</td>
+<td>Convert to WebP</td>
+</tr>
+<tr>
+<td><code>Frame-1321317316.png</code></td>
+<td>PNG</td>
+<td>115.5 KB</td>
+<td>&lt; 37 KB</td>
+<td>Convert to WebP/AVIF</td>
+</tr>
+<tr>
+<td>Logo PNG</td>
+<td>PNG</td>
+<td>Not measured</td>
+<td>2x retina only</td>
+<td>Add <code>srcset</code></td>
+</tr>
+<tr>
+<td>All other images</td>
+<td>Various</td>
+<td>11 files, ~11 KB avg</td>
+<td>Audit each</td>
+<td>WebP conversion + srcset</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Combined estimated savings from top 3 image fixes: ~1,065 KB</strong> — reducing total page weight by approximately 48%.</p>
+<hr />
+<h2 id="scoring-methodology">Scoring Methodology</h2>
+<p>The SEO Health Score of 24/100 is calculated as a weighted average across seven categories. Weights reflect the relative importance of each category to organic search performance for a B2B SaaS site at the pre-launch / early visibility stage.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Weight</th>
+<th>Raw Score</th>
+<th>Weighted Score</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Technical SEO</td>
+<td>22%</td>
+<td>29 / 100</td>
+<td>6.38</td>
+<td>Sitemap (4/100) is incorporated into this category</td>
+</tr>
+<tr>
+<td>Content Quality</td>
+<td>23%</td>
+<td>31 / 100</td>
+<td>7.13</td>
+<td>Highest weight given content is Google's primary ranking signal</td>
+</tr>
+<tr>
+<td>On-Page SEO</td>
+<td>20%</td>
+<td>20 / 100</td>
+<td>4.00</td>
+<td>Derived from Technical + Content findings</td>
+</tr>
+<tr>
+<td>Schema &amp; Structured Data</td>
+<td>10%</td>
+<td>2 / 100</td>
+<td>0.20</td>
+<td>Zero schema present; 2 points for single (malformed) OG tag</td>
+</tr>
+<tr>
+<td>Performance (Core Web Vitals)</td>
+<td>10%</td>
+<td>28 / 100</td>
+<td>2.80</td>
+<td>Based on Lighthouse 13.3 mobile lab data</td>
+</tr>
+<tr>
+<td>AI Search Readiness (GEO)</td>
+<td>10%</td>
+<td>19 / 100</td>
+<td>1.90</td>
+<td>LLM citation, llms.txt, brand entity, structured content</td>
+</tr>
+<tr>
+<td>Images</td>
+<td>5%</td>
+<td>30 / 100</td>
+<td>1.50</td>
+<td>Derived from Performance + Technical findings</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>100%</strong></td>
+<td></td>
+<td><strong>23.91 → 24 / 100</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Score interpretation:</strong><br />
+- 0–30: Critical risk — site is not visible to search engines<br />
+- 31–50: Poor — major structural gaps requiring immediate attention<br />
+- 51–70: Fair — significant improvements needed<br />
+- 71–85: Good — strong foundation with targeted improvements needed<br />
+- 86–100: Excellent — optimized for search performance</p>
+<p>nesthub.ai scores in the critical risk tier. The primary score drivers are the sitewide noindex (which floors Indexability to 0/100 and prevents any SEO work from having effect), the complete absence of structured data (Schema: 2/100), the catastrophic mobile LCP of 14.4 seconds (Performance: 28/100), and the AI search invisibility created by the namespace collision, absent content corpus, and no entity signals (GEO: 19/100).</p>
+<p>The path to a 60+ score is achievable within 90 days through focused execution of the Action Plan.</p>
+<hr />
+<p><em>Audit conducted by Verticality, 2026-05-14. Technical data sources: live HTTP inspection, HTML source analysis, header examination, Lighthouse CLI 13.3 (mobile simulation), and WordPress REST API inventory. Content evaluation framework: Google Quality Rater Guidelines (September 2025 edition). GEO evaluation framework: Generative Engine Optimization best practices and AI crawler documentation. All CrUX field data requires validation via Google PageSpeed Insights once API quota resets.</em></p>
+
+  <div class="watermark">
+    Prepared by <strong>Verticality</strong> · hello@verticality.agency ·
+    Generated May 14, 2026 · Confidential
+  </div>
+
+</body>
+</html>
