@@ -44,3 +44,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# client audit outputs (contain client data — not committed to repo)
+/clients/*/audits/
+!/clients/.gitkeep
