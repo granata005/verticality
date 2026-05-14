@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Verticality
 
-## Getting Started
+Internal tooling for the Verticality SEO & Ads agency.
 
-First, run the development server:
+## SEO Audit Pipeline
+
+Run a full SEO audit for any domain and get a client-ready deliverable (Markdown + PDF).
+
+### Prerequisites
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install          # installs tsx and other JS deps
+pip install markdown playwright
+playwright install chromium
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Usage
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npx tsx scripts/run-seo-audit.ts --domain example.com
+npx tsx scripts/run-seo-audit.ts --domain example.com --client "Acme Corp"
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+One command produces the full deliverable folder. Typical runtime: 10–25 minutes.
 
-## Learn More
+### Output Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+clients/
+  <domain-slug>/
+    audits/
+      <YYYY-MM-DD>/
+        report.md        ← full SEO audit findings
+        action-plan.md   ← prioritized recommendations (Critical → Low)
+        report.pdf       ← client-ready A4 PDF
+        raw/             ← raw subagent artifacts
+          FULL-AUDIT-REPORT.md
+          ACTION-PLAN.md
+          screenshots/   ← desktop + mobile captures
+          *.md           ← per-section subagent outputs
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### What the report covers
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Following the `seo-audit` skill, each report includes:
 
-## Deploy on Vercel
+| Section | Weight |
+|---------|--------|
+| Technical SEO (crawlability, indexability, security) | 22% |
+| Content Quality (E-E-A-T, thin content, readability) | 23% |
+| On-Page SEO (titles, metas, headings, internal links) | 20% |
+| Schema / Structured Data | 10% |
+| Performance (Core Web Vitals) | 10% |
+| AI Search Readiness (GEO, llms.txt, citability) | 10% |
+| Images (alt text, formats) | 5% |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### PDF generation (standalone)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+python3 scripts/generate_pdf.py clients/example-com/audits/2026-05-14/report.md
+# outputs report.pdf alongside the .md
+```
+
+## Project Structure
+
+```
+app/           Next.js App Router pages
+components/    Shared UI components
+scripts/
+  run-seo-audit.ts   SEO audit pipeline entrypoint
+  generate_pdf.py    Markdown → PDF via Playwright
+clients/
+  <slug>/            One folder per client domain
+    audits/
+      <date>/        Audit deliverables (see above)
+```
+
+## Development
+
+```bash
+npm run dev    # local Next.js dev server
+npm run build  # production build
+npm run lint   # ESLint
+```
+
+Deployed on Railway: https://verticality-production.up.railway.app
