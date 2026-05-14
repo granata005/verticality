@@ -75,6 +75,39 @@ clients/
       <date>/        Audit deliverables (see above)
 ```
 
+## Ads Audit Pipeline
+
+Run a full paid advertising audit for any domain and get a client-ready deliverable (Markdown + PDF).
+
+### Usage
+
+```bash
+npx tsx scripts/run-ads-audit.ts <domain>
+npx tsx scripts/run-ads-audit.ts shopify.com
+```
+
+Env: `ANTHROPIC_API_KEY` (preferred) or `GEMINI_API_KEY`.
+
+### Output Structure
+
+```
+clients/
+  <domain-slug>/
+    audits/
+      <YYYY-MM-DD>/
+        ads/
+          ADS-AUDIT-REPORT.md   ← platform-by-platform findings
+          ADS-ACTION-PLAN.md    ← prioritized ad recommendations
+          ADS-QUICK-WINS.md     ← wins achievable in <30 days
+          report.pdf            ← client-ready A4 PDF
+```
+
+## Delivery SOP
+
+Full end-to-end procedure for running a client engagement — intake, slug convention, pipeline invocation, review checklist, portal upload, and client notification:
+
+**[docs/sop/audit-delivery.md](docs/sop/audit-delivery.md)**
+
 ## Development
 
 ```bash
